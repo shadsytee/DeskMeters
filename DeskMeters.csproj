@@ -1,0 +1,56 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net48</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <PlatformTarget>x64</PlatformTarget>
+    <AssemblyName>DeskMeters</AssemblyName>
+    <RootNamespace>DeskMeters</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <ApplicationIcon>assets\DeskMeters.ico</ApplicationIcon>
+    <Version>2.1.0</Version>
+    <Product>DeskMeters</Product>
+    <Description>Desktop CPU, Network, Drives and GPU meters</Description>
+    <Copyright>DeskMeters contributors</Copyright>
+    <Company>DeskMeters</Company>
+    <Authors>DeskMeters contributors</Authors>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <EnableDefaultReferenceItems>false</EnableDefaultReferenceItems>
+    <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <DebugType>none</DebugType>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AutoGenerateBindingRedirects>false</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>false</GenerateBindingRedirectsOutputType>
+    <!-- LHM dependencies reference framework 2.0/3.5 assemblies; the CLR unifies those. -->
+    <MSBuildWarningsAsMessages>MSB3276</MSBuildWarningsAsMessages>
+  </PropertyGroup>
+
+  <!-- Building on Linux/macOS: use Mono's .NET Framework reference assemblies.
+       On Windows the SDK finds the 4.8 reference assemblies on its own. -->
+  <PropertyGroup Condition="'$(OS)' != 'Windows_NT'">
+    <FrameworkPathOverride>/usr/lib/mono/4.8-api</FrameworkPathOverride>
+    <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Management" />
+    <Reference Include="LibreHardwareMonitorLib">
+      <HintPath>lib\LibreHardwareMonitorLib.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+  </ItemGroup>
+
+  <!-- LibreHardwareMonitor and its dependencies are embedded in the exe and
+       loaded from memory at startup, so the build output is a single file. -->
+  <ItemGroup>
+    <EmbeddedResource Include="lib\*.dll" LogicalName="lib.%(Filename)%(Extension)" />
+    <EmbeddedResource Include="fonts\*.ttf" LogicalName="fonts.%(Filename)%(Extension)" />
+  </ItemGroup>
+
+</Project>
